@@ -1,7 +1,7 @@
-const { Cu				} = require("chrome");
-const { viewFor			} = require("sdk/view/core");
-const { browserWindows	} = require("sdk/windows");
-const { SitePermissions	} = Cu.import("resource:///modules/SitePermissions.jsm");
+const { Cu } = require("chrome");
+const { viewFor } = require("sdk/view/core");
+const { browserWindows } = require("sdk/windows");
+const { SitePermissions } = Cu.import("resource:///modules/SitePermissions.jsm");
 
 let orig;
 
