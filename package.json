@@ -1,0 +1,19 @@
+{
+  "title": "Full Site Permissions",
+  "name": "fullsitepermissions",
+  "id": "fullsitepermissions@cssu.in",
+  "version": "0.0.1",
+  "description": "Shows all permissions for a site in the identity popup",
+  "main": "index.js",
+  "author": "Marcii <marcii@cssu.in>",
+  "permissions": {
+    "private-browsing": true
+  },
+  "engines": {
+    "firefox": ">=38.0a1"
+  },
+  "license": "MIT",
+  "keywords": [
+    "jetpack"
+  ]
+}
