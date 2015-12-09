@@ -1,23 +1,24 @@
 const { Cu } = require("chrome");
+const { SitePermissions } = Cu.import("resource:///modules/SitePermissions.jsm");
 const { viewFor } = require("sdk/view/core");
 const { browserWindows } = require("sdk/windows");
-const { SitePermissions } = Cu.import("resource:///modules/SitePermissions.jsm");
+
+const windowUtils = require('sdk/window/utils');
+
 
 let orig;
 
-function replace(browserWindow) {
-	console.log(browserWindow);
-	let xulWindow = viewFor(browserWindow).window;
+function replace(window) {
 
 	if (!orig) {
-		orig = xulWindow.gIdentityHandler.updateSitePermissions;
+		orig = window.gIdentityHandler.updateSitePermissions;
 	}
 
-	xulWindow.gIdentityHandler.updateSitePermissions = function () {
+	window.gIdentityHandler.updateSitePermissions = function () {
 		while (this._permissionList.hasChildNodes())
 			this._permissionList.removeChild(this._permissionList.lastChild);
 
-		let uri = xulWindow.gBrowser.currentURI;
+		let uri = window.gBrowser.currentURI;
 
 		for (let permission of SitePermissions.listPermissions()) {
 			let state = SitePermissions.get(uri, permission);
@@ -29,23 +30,24 @@ function replace(browserWindow) {
 			this._permissionList.appendChild(item);
 		}
 	};
+	console.log(window.gIdentityHandler.updateSitePermissions.toString());
 }
 
-function restore(browserWindow) {
-	let xulWindow = viewFor(browserWindow).window;
-
-	xulWindow.gIdentityHandler.updateSitePermissions = orig;
+function restore(window) {
+	window.gIdentityHandler.updateSitePermissions = orig;
 }
 
-browserWindows.on("open", replace);
 
 exports.main = function(options, callbacks) {
-	for (let browserWindow of browserWindows) {
-		replace(browserWindow);
+	for (let w of windowUtils.windows(null, { includePrivate: true })) {
+		replace(w);
 	}
+	browserWindows.on("open", function(browserWindow) {
+		replace(viewFor(browserWindow));
+	});
 }
 exports.onUnload = function() {
-	for (let browserWindow of browserWindows) {
-		restore(browserWindow);
+	for (let w of windowUtils.windows(null, { includePrivate: true })) {
+		restore(w);
 	}
 }
