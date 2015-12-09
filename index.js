@@ -29,7 +29,6 @@ function replace(window) {
 			this._permissionList.appendChild(item);
 		}
 	};
-	console.log(window.gIdentityHandler.updateSitePermissions.toString());
 }
 
 function restore(window) {
