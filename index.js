@@ -9,7 +9,6 @@ const windowUtils = require('sdk/window/utils');
 let orig;
 
 function replace(window) {
-
 	if (!orig) {
 		orig = window.gIdentityHandler.updateSitePermissions;
 	}
