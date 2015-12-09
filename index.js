@@ -33,7 +33,6 @@ function replace(browserWindow) {
 
 function restore(browserWindow) {
 	let xulWindow = viewFor(browserWindow).window;
-
 	xulWindow.gIdentityHandler.updateSitePermissions = orig;
 }
 
